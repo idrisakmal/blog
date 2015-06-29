@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blog</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Raleway:400,700">
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= favicon_link_tag 'icon2.png' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<div id="sidebar">
+		<div class="logo">
+			<%= link_to root_path do %>
+				<%= image_tag "icon2.png" %>
+			<% end %>
+		</div>
+
+		<ul>
+			<li class="category">Website</li>
+			<li><%= link_to "Blog", root_path %></li>
+			<li><%= link_to "About", about_path %></li>
+		</ul>
+
+		<ul>
+			<li class="category">Social</li>
+			<li><a href="https://twitter.com/idris_akmal">Twitter</a></li>
+			<li><a href="http://instagram.com/idrisakmal">Instagram</a></li>
+			<li><a href="https://github.com/idrisakmal">Github</a></li>
+			<li><a href="mailto:simple_idris@yahoo.com">Email</a></li>
+		</ul>
+	</div>
+
+	<div id="main_content">
+		<div id="header">
+			<% if current_page?(root_path) %>
+				<p>All Posts</p>
+			<% elsif current_page?(about_path) %>
+				<p>About</p>
+			<% else %>
+				<%= link_to "Back to All Posts", root_path %>
+			<% end %>
+
+			<div class="buttons">
+				<% if user_signed_in? %>
+					<% if can? :create, Post %>
+					  <button class="button"><%= link_to "New Post", new_post_path %></button>
+					<% end %>
+					<%= link_to 'Logout', destroy_user_session_path, class: "button", method: :delete %>
+				<% else %>
+					<button class="button"><%= link_to "Login", new_user_session_path %></button>
+				<% end %>
+			</div>
+		</div>
+
+		<div id="notice_wrapper">
+		<% if notice %>
+			<p class="notice"><%= notice %></p>
+		<% elsif %>
+			<p class="alert"><%= alert %></p>
+		<% end %>
+		</div>
+
+		<%= yield %>
+	</div>
+
+	<script>
+		$(document).ready(function() {
+			setTimeout(function() {
+				$('#notice_wrapper').fadeOut("slow", function() {
+					$(this).remove();
+				})
+			}, 4500);
+		});
+	</script>
+</body>
+</html>
